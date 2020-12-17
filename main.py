@@ -50,9 +50,8 @@ if values is not None and caseStructure is not None:
     for j in values["values"]:
         id = j['id']
         value = j['value']
-        for i in caseStructure["params"]:
-            get_value(i)
+        get_value(caseStructure)
     structureValuesFile = "StructureWithValues.json"
-    with open(structureValuesFile, "w") as write_file:
+    with open(structureValuesFile, "w",encoding='utf-8') as write_file:
         json.dump(caseStructure, write_file, indent=4, ensure_ascii=False)
         write_file.close()
