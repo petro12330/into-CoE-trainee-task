@@ -27,31 +27,28 @@ values = get_data(value_file)
 caseStructure = get_data(structure_file)
 
 
-def get_value(item):
-    global id, value
+def get_value(item, value):
     try:
-        for i in item["params"]:
-            get_value(i)
+        for param in item["params"]:
+            get_value(param, value)
     except KeyError:
         try:
             for i in item["values"]:
-                if i['id'] == value and id == item['id']:
+                if i['id'] == value['value'] and value['id'] == item['id']:
                     item['value'] = i['title']
                     return item['value']
-                get_value(i)
+                get_value(i, value)
 
         except KeyError:
-            if item['id'] == id:
-                item['value'] = value
+            if item['id'] == value['id']:
+                item['value'] = value['value']
                 return item['value']
 
 
 if values is not None and caseStructure is not None:
-    for j in values["values"]:
-        id = j['id']
-        value = j['value']
-        get_value(caseStructure)
+    for value in values["values"]:
+        get_value(caseStructure, value)
     structureValuesFile = "StructureWithValues.json"
-    with open(structureValuesFile, "w",encoding='utf-8') as write_file:
+    with open(structureValuesFile, "w", encoding='utf-8') as write_file:
         json.dump(caseStructure, write_file, indent=4, ensure_ascii=False)
         write_file.close()
